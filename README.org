@@ -6,10 +6,10 @@ sequence—the software efficiently computes and highlights overlaps with the
 highest sequence similarity. This modification of traditional alignment
 algorithms allows for more efficient detection or design of gene overlaps.
 
-For this tools, please refer to:
+For this tools, please refer to https://zenodo.org/doi/10.5281/zenodo.10848561 and:
 #+begin_example
-Opuu, Vaitea. Computational design of proteins and enzymes. Diss. Institut polytechnique de Paris, 2020.
 Opuu, Vaitea, Martin Silvert, and Thomas Simonson. "Computational design of fully overlapping coding schemes for protein pairs and triplets." Scientific reports 7.1 (2017): 15873.
+Opuu, Vaitea. Computational design of proteins and enzymes. Diss. Institut polytechnique de Paris, 2020.
 #+end_example
 
 * Requirement
