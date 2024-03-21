@@ -44,7 +44,6 @@ strong gap penalties:
 python ./src/bin/overgenes.py global test_data/seq_x.fa test_data/seq_y.fa -m blosum90 -f 2 -go -100 -gp -100
 #+end_src
 
-#+RESULTS:
 #+begin_example
 # GAP_PEN -100.0
 # GAP_OPEN -100.0
