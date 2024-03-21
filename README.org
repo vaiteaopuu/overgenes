@@ -1,0 +1,173 @@
+* Overview
+This program specializes in identifying pairs of overlapping genes that encode
+the most similar protein sequences, using modified versions of local and global
+sequence alignment algorithms. By inputting two fasta files—each with a protein
+sequence—the software efficiently computes and highlights overlaps with the
+highest sequence similarity. This modification of traditional alignment
+algorithms allows for more efficient detection or design of gene overlaps.
+
+For this tools, please refer to:
+#+begin_example
+Opuu, Vaitea. Computational design of proteins and enzymes. Diss. Institut polytechnique de Paris, 2020.
+Opuu, Vaitea, Martin Silvert, and Thomas Simonson. "Computational design of fully overlapping coding schemes for protein pairs and triplets." Scientific reports 7.1 (2017): 15873.
+#+end_example
+
+* Requirement
+- python 3.7 >=
+- gcc compiler
+
+* Installation
+Run the command line below to compile the C program:
+#+begin_src bash :results output
+cd src
+make clean
+make all
+#+end_src
+
+* Run a search
+
+To run a local search:
+#+begin_src bash :results output
+python ./src/bin/overgenes.py local <fasta X> <fasta Y> -f <frame>
+#+end_src
+where <fasta X> and <fasta Y> are fasta files containing one sequence for X and
+Y. <frame> is the overlapping phase.
+
+To run a global search:
+#+begin_src bash :results output
+python ./src/bin/overgenes.py global <fasta X> <fasta Y> -f <frame>
+#+end_src
+
+To design pairs of overlapping genes, one should use the global algorithm with
+strong gap penalties:
+#+begin_src bash :results output
+python ./src/bin/overgenes.py global test_data/seq_x.fa test_data/seq_y.fa -m blosum90 -f 2 -go -100 -gp -100
+#+end_src
+
+#+RESULTS:
+#+begin_example
+# GAP_PEN -100.0
+# GAP_OPEN -100.0
+# MAT blosum90
+# FRAME 2
+# NAMEX SEQ_X_PRIME
+# NAMEY SEQ_Y_PRIME
+# DCA false
+# SCORE 337.5
+# STARTX 20
+# STARTY 20
+# ENDX 103
+# ENDY 103
+
+>SEQ_X_PRIME/20-103
+VQLTKEEGKSLGFSVVGLKSEERGELGLFVSEVQPGGFGAQDGQLQESDQLLAIDRTPLADHLAHQNPLAVLQKQTGLVHLVL--------------------
+VNLTKKKGKALGFQLLGLKAKERGNLGFFVAKVNPGGLGAKTGNLKKATNLLALTRTPLATHLAHKNPLAVLQKQTGLLHLVL--------------------
+
+>SEQ_Y_PRIME/20-103
+VQLTKEEGKSLGFSVVGLKSEGRGELGLFVSEVQPGGFGAQDGQLEESDQLLAIDRSPVADHLAHQNPLAVLQKQTGLVRLVL--------------------
+SQLNKEEGKSLGFSVVGLKSEGKGELGLFCSESQPGGFGSQDGQLEESDQLISIDKNPVSDTLSTQKPLSSLTKTNGLVTLSL--------------------
+
+
+  TCAGTTGAATTGTTTCTTCTTCCCTTTTCGGAACCCAAAAGTCAACAACCCGAATTTTCGCTTCCTTTCCCCCTTGAAC
+  AGTCAACTTAACAAAGAAGAAGGGAAAAGCCTTGGGTTTTCAGTTGTTGGGCTTAAAAGCGAAGGAAAGGGGGAACTTG
+X'  V  N  L  T  K  K  K  G  K  A  L  G  F  Q  L  L  G  L  K  A  K  E  R  G  N  L
+X   V  Q  L  T  K  E  E  G  K  S  L  G  F  S  V  V  G  L  K  S  E  E  R  G  E  L
+Y' S  Q  L  N  K  E  E  G  K  S  L  G  F  S  V  V  G  L  K  S  E  G  K  G  E  L
+Y  V  Q  L  T  K  E  E  G  K  S  L  G  F  S  V  V  G  L  K  S  E  G  R  G  E  L
+
+  CCCGAAAAAACATCGCTTTCAGTTGGGCCCCCCAAACCCTCGGTTCTGCCCGTTGAACTTCTTTCGCTGGTTGAATAAT
+  GGGCTTTTTTGTAGCGAAAGTCAACCCGGGGGGTTTGGGAGCCAAGACGGGCAACTTGAAGAAAGCGACCAACTTATTA
+X'  G  F  F  V  A  K  V  N  P  G  G  L  G  A  K  T  G  N  L  K  K  A  T  N  L  L
+X   G  L  F  V  S  E  V  Q  P  G  G  F  G  A  Q  D  G  Q  L  Q  E  S  D  Q  L  L
+Y' G  L  F  C  S  E  S  Q  P  G  G  F  G  S  Q  D  G  Q  L  E  E  S  D  Q  L  I
+Y  G  L  F  V  S  E  V  Q  P  G  G  F  G  A  Q  D  G  Q  L  E  E  S  D  Q  L  L
+
+  TCGTAACTGTTCTTGGGGCAATCGCTGTGTGAATCGTGTGTTTTTGGGGAATCGTCAGAATGTTTTTGTTTGCCCGAAC
+  AGCATTGACAAGAACCCCGTTAGCGACACACTTAGCACACAAAAACCCCTTAGCAGTCTTACAAAAACAAACGGGCTTG
+X'  A  L  T  R  T  P  L  A  T  H  L  A  H  K  N  P  L  A  V  L  Q  K  Q  T  G  L
+X   A  I  D  R  T  P  L  A  D  H  L  A  H  Q  N  P  L  A  V  L  Q  K  Q  T  G  L
+Y' S  I  D  K  N  P  V  S  D  T  L  S  T  Q  K  P  L  S  S  L  T  K  T  N  G  L
+Y  A  I  D  R  S  P  V  A  D  H  L  A  H  Q  N  P  L  A  V  L  Q  K  Q  T  G  L
+
+  CAATGTGAATCAGAATTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+  GTTACACTTAGTCTTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+X'  L  H  L  V  L  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+X   V  H  L  V  L  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+Y' V  T  L  S  L  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+Y  V  R  L  V  L  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+
+
+#+end_example
+
+* Example
+Here is an example of a global search overlapping genes
+#+begin_src bash :results output
+python ./src/bin/overgenes.py global test_data/seq_x.fa test_data/seq_y.fa -m blosum90 -f -2
+#+end_src
+
+#+RESULTS:
+#+begin_example
+# GAP_PEN -2.0
+# GAP_OPEN -16.0
+# MAT blosum90
+# FRAME -2
+# NAMEX SEQ_X_PRIME
+# NAMEY SEQ_Y_PRIME
+# DCA false
+# SCORE 491.0
+# STARTX 20
+# STARTY 0
+# ENDX 103
+# ENDY 83
+
+>SEQ_X_PRIME/20-103
+VQLTKEEGKSLGFSVVGLKSEERGELGLFVSEVQPGGFGAQDGQLQESDQLLAIDRTPLADHLAHQNPLAVLQKQTGLVHLVL--------------------
+VQLTKEEGKSLGFSVVGLKSEERGELGLFVSEVQPGGFGAQDGQLQESDQLLAIDRTPLADHLAHQNPLAVLQKQTGLVHLVL--------------------
+
+>SEQ_Y_PRIME/0-83
+VQLTKEEGKSLGFSVVGLKSEGRGELGLFVSEVQPGGFGAQDGQLEESDQLLAIDRSPVADHLAHQNPLAVLQKQTGLVRLVL--------------------
+VQLTKEEGKSLGFSVVGLKSEGRGELGLFVSEVQPGGFGAQDGQLEESDQLLAIDRSPVADHLAHQNPLAVLQKQTGLVRLVL--------------------
+
+
+Y   -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  L  V  L  R  V  L
+Y'  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  L  V  L  R  V  L
+  CATGTTGATTGTTTTCTTCTTCCTTTTTCGGATCCTAAGTCGCATCATCCTGATTTTTCGCTTCTTGCTCCGCTTGATC
+  GTACAACTAACAAAAGAAGAAGGAAAAAGCCTAGGATTCAGCGTAGTAGGACTAAAAAGCGAAGAACGAGGCGAACTAG
+X' V  Q  L  T  K  E  E  G  K  S  L  G  F  S  V  V  G  L  K  S  E  E  R  G  E  L
+X  V  Q  L  T  K  E  E  G  K  S  L  G  F  S  V  V  G  L  K  S  E  E  R  G  E  L
+
+Y   G  T  Q  K  Q  L  V  A  L  P  N  Q  H  A  L  H  D  A  V  P  S  R  D  I  A  L
+Y'  G  T  Q  K  Q  L  V  A  L  P  N  Q  H  A  L  H  D  A  V  P  S  R  D  I  A  L
+  CCGGACAAACAAAGACTTCATGTCGGTCCCCCAAAACCACGCGTTCTACCAGTCGATGTCCTCTCGCTAGTTAACGATC
+  GGCCTGTTTGTTTCTGAAGTACAGCCAGGGGGTTTTGGTGCGCAAGATGGTCAGCTACAGGAGAGCGATCAATTGCTAG
+X' G  L  F  V  S  E  V  Q  P  G  G  F  G  A  Q  D  G  Q  L  Q  E  S  D  Q  L  L
+X  G  L  F  V  S  E  V  Q  P  G  G  F  G  A  Q  D  G  Q  L  Q  E  S  D  Q  L  L
+
+Y   L  Q  D  S  E  E  L  Q  G  D  Q  A  G  F  G  G  P  Q  V  E  S  V  F  L  G  L
+Y'  L  Q  D  S  E  E  L  Q  G  D  Q  A  G  F  G  G  P  Q  V  E  S  V  F  L  G  L
+  CGTTAACTAGCCTGAGGAGATCGACTGGTAGAACGCGTGGTTTTGGGGGACCGACATGAAGTCTTTGTTTGTCCGGATC
+  GCAATTGATCGGACTCCTCTAGCTGACCATCTTGCGCACCAAAACCCCCTGGCTGTACTTCAGAAACAAACAGGCCTAG
+X' A  I  D  R  T  P  L  A  D  H  L  A  H  Q  N  P  L  A  V  L  Q  K  Q  T  G  L
+X  A  I  D  R  T  P  L  A  D  H  L  A  H  Q  N  P  L  A  V  L  Q  K  Q  T  G  L
+
+Y   E  G  R  G  E  S  K  L  G  V  V  S  F  G  L  S  K  G  E  E  K  T  L  Q  V
+Y'  E  G  R  G  E  S  K  L  G  V  V  S  F  G  L  S  K  G  E  E  K  T  L  Q  V
+  CAAGTGGAGCAGGAAGTCTGAAGTTTGGTTGTTGTCTTTTTGGGTTTCTGAATGGGAGGAGGAATCAGTTGACTTG
+  GTTCACCTCGTCCTTCAGACTTCAAACCAACAACAGAAAAACCCAAAGACTTACCCTCCTCCTTAGTCAACTGAAC
+X' V  H  L  V  L  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+X  V  H  L  V  L  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+
+
+#+end_example
+
+
+You can also output the results in an html file:
+
+#+begin_src bash :results output
+python ./src/bin/overgenes.py global test_data/seq_x.fa test_data/seq_y.fa -m blosum90 -f -2 -o test_data/seq_x_seq_y_out.html
+#+end_src
+
+#+RESULTS:
+
+* Contact
+For bug reports or contribution, please contact vaiteaopu@gmail.com
