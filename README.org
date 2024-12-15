@@ -169,4 +169,4 @@ python ./src/bin/overgenes.py global test_data/seq_x.fa test_data/seq_y.fa -m bl
 #+RESULTS:
 
 * Contact
-For bug reports or contribution, please contact vaiteaopu@gmail.com
+For bug reports or contribution, please contact vaiteaopuu@gmail.com
